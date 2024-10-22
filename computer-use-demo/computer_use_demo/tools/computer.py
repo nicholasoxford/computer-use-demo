@@ -10,7 +10,7 @@ from uuid import uuid4
 
 from .base import BaseAnthropicTool, ComputerToolOptions, ToolError, ToolResult
 from .run import run
-
+import pyautogui
 OUTPUT_DIR = "/tmp/outputs"
 
 TYPING_DELAY_MS = 12
@@ -82,8 +82,8 @@ class ComputerTool(BaseAnthropicTool):
     def __init__(self):
         super().__init__()
 
-        self.width = int(os.getenv("WIDTH") or 0)
-        self.height = int(os.getenv("HEIGHT") or 0)
+        self.width = int(os.getenv("WIDTH") or pyautogui.size().width)
+        self.height = int(os.getenv("HEIGHT") or pyautogui.size().height)
         assert self.width and self.height, "WIDTH, HEIGHT must be set"
         if (display_num := os.getenv("DISPLAY_NUM")) is not None:
             self.display_num = int(display_num)

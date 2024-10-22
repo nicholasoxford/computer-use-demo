@@ -25,7 +25,7 @@ from anthropic.types.beta import (
     BetaToolResultBlockParam,
 )
 
-from .tools import BashTool, ComputerTool, EditTool, ToolCollection, ToolResult
+from .tools import BashTool, ComputerTool, EditTool, MacComputerTool, ToolCollection, ToolResult
 
 BETA_FLAG = "computer-use-2024-10-22"
 
@@ -48,22 +48,13 @@ PROVIDER_TO_DEFAULT_MODEL_NAME: dict[APIProvider, str] = {
 # We encourage modifying this system prompt to ensure the model has context for the
 # environment it is running in, and to provide any additional information that may be
 # helpful for the task at hand.
-SYSTEM_PROMPT = f"""<SYSTEM_CAPABILITY>
-* You are utilising an Ubuntu virtual machine using {platform.machine()} architecture with internet access.
-* You can feel free to install Ubuntu applications with your bash tool. Use curl instead of wget.
-* To open firefox, please just click on the firefox icon.  Note, firefox-esr is what is installed on your system.
-* Using bash tool you can start GUI applications, but you need to set export DISPLAY=:1 and use a subshell. For example "(DISPLAY=:1 xterm &)". GUI apps run with bash tool will appear within your desktop environment, but they may take some time to appear. Take a screenshot to confirm it did.
-* When using your bash tool with commands that are expected to output very large quantities of text, redirect into a tmp file and use str_replace_editor or `grep -n -B <lines before> -A <lines after> <query> <filename>` to confirm output.
-* When viewing a page it can be helpful to zoom out so that you can see everything on the page.  Either that, or make sure you scroll down to see everything before deciding something isn't available.
-* When using your computer function calls, they take a while to run and send back to you.  Where possible/feasible, try to chain multiple of these calls all into one function calls request.
+SYSTEM_PROMPT = """<SYSTEM_CAPABILITY>
+* You are controlling a MacBook running macOS.
+* You can use mouse and keyboard commands to interact with the system.
+* You can take screenshots of the current screen.
+* When using your computer function calls, they take a while to run and send back to you. Where possible/feasible, try to chain multiple of these calls all into one function calls request.
 * The current date is {datetime.today().strftime('%A, %B %-d, %Y')}.
-</SYSTEM_CAPABILITY>
-
-<IMPORTANT>
-* When using Firefox, if a startup wizard appears, IGNORE IT.  Do not even click "skip this step".  Instead, click on the address bar where it says "Search or enter address", and enter the appropriate search term or URL there.
-* If the item you are looking at is a pdf, if after taking a single screenshot of the pdf it seems that you want to read the entire document instead of trying to continue to read the pdf from your screenshots + navigation, determine the URL, use curl to download the pdf, install and use pdftotext to convert it to a text file, and then read that text file directly with your StrReplaceEditTool.
-* When viewing a webpage, first use your computer tool to view it and explore it.  But, if there is a lot of text on that page, instead curl the html of that page to a file on disk and then using your StrReplaceEditTool to view the contents in plain text.
-</IMPORTANT>"""
+</SYSTEM_CAPABILITY>"""
 
 
 async def sampling_loop(
@@ -83,9 +74,9 @@ async def sampling_loop(
     Agentic sampling loop for the assistant/tool interaction of computer use.
     """
     tool_collection = ToolCollection(
-        ComputerTool(),
         BashTool(),
         EditTool(),
+        MacComputerTool(),
     )
     system = (
         f"{SYSTEM_PROMPT}{' ' + system_prompt_suffix if system_prompt_suffix else ''}"
@@ -248,3 +239,4 @@ def _maybe_prepend_system_tool_result(result: ToolResult, result_text: str):
     if result.system:
         result_text = f"<system>{result.system}</system>\n{result_text}"
     return result_text
+
