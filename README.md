@@ -1,5 +1,8 @@
 # Computer Use Macbook Demo
 
+![Screenshot 2024-10-23 at 7 39 51 AM](https://github.com/user-attachments/assets/f1321098-e650-437c-83bd-5ce8f4cf1c32)
+
+
 > [!WARNING]
 > Computer use is a beta feature. Please be aware that computer use poses unique risks that are distinct from standard API features or chat interfaces. These risks are heightened when using computer use to interact with the internet. To minimize risks, consider taking precautions such as:
 >
