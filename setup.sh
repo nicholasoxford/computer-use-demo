@@ -4,4 +4,6 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r dev-requirements.txt
 pre-commit install
-streamlit run mac_computer_demo.py
+
+
+ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY streamlit run mac_computer_demo.py

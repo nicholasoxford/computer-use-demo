@@ -15,32 +15,23 @@
 > [!CAUTION]
 > By using computer-use-mac-demo, you are ignoring the above warnings. Use at your own risk.
 
-This repository helps you get started with computer use on Claude, with reference implementations of:
+This repository helps you get started with controlling your mac using `computer use` on Claude, with reference implementations of:
 
-- Build files to create a Docker container with all nescessary dependencies
-- A computer use agent loop using the Anthropic API, Bedrock, or Vertex to access the updated Claude 3.5 Sonnet model
-- Anthropic-defined computer use tools
+- Install dependencies and run the python script to start the agent loop
+- A computer use agent loop using the Anthropic API to access the updated Claude 3.5 Sonnet model
+- Extends Anthropic-defined computer use tools to include additional tools for interacting with your mac
 - A streamlit app for interacting with the agent loop
-
-Please use [this form](https://forms.gle/BT1hpBrqDPDUrCqo7) to provide feedback on the quality of the model responses, the API itself, or the quality of the documentation - we cannot wait to hear from you!
 
 > [!IMPORTANT]
 > The Beta API used in this reference implementation is subject to change. Please refer to the [API release notes](https://docs.anthropic.com/en/release-notes/api) for the most up-to-date information.
 
-> [!IMPORTANT]
-> The components are weakly separated: the agent loop runs in the container being controlled by Claude, can only be used by one session at a time, and must be restarted or reset between sessions if necessary.
-
-## Quickstart: running the Docker container
-
-### Anthropic API
+### Run locally
 
 ```bash
-./setup.sh  #
+ANTHROPIC_API_KEY=your_key_here ./setup.sh # pass your Anthropic API key as an environment variable or set it in browser.
 ```
 
-Once the container is running, open your browser to [http://localhost:8080](http://localhost:8080) to access the combined interface that includes both the agent chat and desktop view.
-
-The container stores settings like API key and custom system prompt in `~/.anthropic/`. Mount this directory to persist these settings between container runs.
+Once the python script is running, open your browser to [http://localhost:8080](http://localhost:8080) to access th interface that includes both the agent chat.
 
 Alternative access points:
 
