@@ -38,9 +38,7 @@ STREAMLIT_STYLE = """
         display: none;
     }
      /* Hide the streamlit deploy button */
-    .stDeployButton {
-        visibility: hidden;
-    }
+    
 </style>
 """
 

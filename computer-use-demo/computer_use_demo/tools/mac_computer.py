@@ -1,10 +1,11 @@
+from datetime import time
 from .base import BaseAnthropicTool, ComputerToolOptions, ToolError, ToolResult
 import pyautogui
 import base64
 from io import BytesIO
 from pathlib import Path
 import os
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 class MacComputerTool(BaseAnthropicTool):
     name = "computer"
@@ -14,6 +15,8 @@ class MacComputerTool(BaseAnthropicTool):
         super().__init__()
         # Get screen size
         self.width, self.height = pyautogui.size()
+        #print screen size
+        print(f"Screen size: {self.width}x{self.height}")
         self._screenshot_delay = 2.0
         self._scaling_enabled = True
         
@@ -26,7 +29,9 @@ class MacComputerTool(BaseAnthropicTool):
         }
 
     async def __call__(self, *, action: str, text: str | None = None, 
-                       coordinate: tuple[int, int] | None = None, **kwargs):
+                       coordinate: tuple[int, int] | None = None, 
+                       modifiers: List[str] | None = None, **kwargs):
+        print(f"Action: {action}, Text: {text}, Coordinate: {coordinate}, Modifiers: {modifiers}")
         if action in ("mouse_move", "left_click_drag"):
             if coordinate is None:
                 raise ToolError(f"coordinate is required for {action}")
@@ -46,7 +51,24 @@ class MacComputerTool(BaseAnthropicTool):
                 raise ToolError(f"text is required for {action}")
             
             if action == "key":
-                pyautogui.press(text)
+                # if text includes command, shift, or option, add the appropriate modifier, and split the text by -
+                if "command" in text:
+                    text = text.split("+")[1]
+                    pyautogui.hotkey("command", text)
+                elif "shift" in text:
+                    text = text.split("+")[1]
+                    pyautogui.hotkey("shift", text)
+                elif "option" in text:
+                    text = text.split("+")[1]
+                    pyautogui.hotkey("option", text)
+                elif "super" in text.lower():  # Make case-insensitive
+                    textCommand = text.split("+")[1].lower().strip()
+                    pyautogui.keyDown("command")
+                    pyautogui.keyDown(textCommand)
+                    pyautogui.keyUp("command")
+                    pyautogui.keyUp(textCommand)
+                else:
+                    pyautogui.press(text)
                 return ToolResult(output=f"Pressed key: {text}")
             elif action == "type":
                 pyautogui.write(text, interval=0.01)
@@ -82,3 +104,6 @@ class MacComputerTool(BaseAnthropicTool):
         base64_image = base64.b64encode(img_buffer.getvalue()).decode()
         
         return ToolResult(base64_image=base64_image)
+    
+    
+
