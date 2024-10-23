@@ -1,6 +1,6 @@
 # Computer Use Macbook Demo
 
-> [!IMPORTANT]
+> [!WARNING]
 > Computer use is a beta feature. Please be aware that computer use poses unique risks that are distinct from standard API features or chat interfaces. These risks are heightened when using computer use to interact with the internet. To minimize risks, consider taking precautions such as:
 >
 > 1. Use a dedicated virtual machine or container with minimal privileges to prevent direct system attacks or accidents.
@@ -12,7 +12,7 @@
 >
 > Finally, please inform end users of relevant risks and obtain their consent prior to enabling computer use in your own products.
 
-> [!WARNING]
+> [!CAUTION]
 > By using computer-use-mac-demo, you are ignoring the above warnings. Use at your own risk.
 
 This repository helps you get started with computer use on Claude, with reference implementations of:
